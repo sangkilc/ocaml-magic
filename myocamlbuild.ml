@@ -126,8 +126,8 @@ let _ = dispatch begin function
            A"src/magic_wrap_stubs.o";
            A"-cclib"; A("-L"^ocamlpath^"/camlidl");
            A"-cclib"; A"-lcamlidl";
-           Px"src/magic_wrap_helper.o";
-           Px"src/libmagic.a";
+           A"-cclib"; Px"src/magic_wrap_helper.o";
+           A"-cclib"; Px"src/libmagic.a";
            A"-cclib"; A"-lz";
           ]);
 
