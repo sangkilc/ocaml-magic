@@ -126,6 +126,8 @@ let _ = dispatch begin function
            A"src/magic_wrap_stubs.o";
            A"-cclib"; A("-L"^ocamlpath^"/camlidl");
            A"-cclib"; A"-lcamlidl";
+           Px"src/magic_wrap_helper.o";
+           Px"src/libmagic.a";
            A"-cclib"; A"-lz";
           ]);
 
@@ -168,13 +170,6 @@ let _ = dispatch begin function
           "src/magic_wrap_stubs.o";
           "src/libmagic.a";
         ];
-
-      (* linking dependency *)
-      dep ["ocaml"; "link"]
-        [
-          "src/magic_wrap_helper.o";
-          "src/libmagic.a";
-        ]
 
   | _ -> ()
 end
