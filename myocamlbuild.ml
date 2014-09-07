@@ -75,6 +75,8 @@ let _ = dispatch begin function
          "pkg_unix";
         ];
 
+      tag_file "src/libmagic_stubs.c" ["stubs"];
+
   | After_rules ->
 
       (* When one link an OCaml library/binary/package, one should use -linkpkg *)
@@ -120,7 +122,23 @@ let _ = dispatch begin function
       flag ["ocaml"; "compile"; "native"]
         (S[A"-inline";A"10"]);
       flag ["ocaml"; "link"; "native"]
-        (S[A"-inline";A"10"]);
+        (S[A"-inline";A"10";
+           A"../file/src/.libs/libmagic.a";
+           A"src/libmagic_stubs.o";
+           A"-cclib"; A("-L"^ocamlpath^"/camlidl");
+           A"-cclib"; A"-lcamlidl";
+           A"-cclib"; A"-lz";
+          ]);
+
+      (* c stub generated from camlidl *)
+      flag ["c"; "compile"; "stubs"]
+        (S[A"-ccopt";A("-I"^ocamlpath^"/camlidl");]);
+
+      flag ["c"; "compile"; "file:src/libmagic_helper.c"]
+        (S[A"-ccopt";A("-I../file/src");]);
+
+      (* camlidl needs to consider bfdarch *)
+      flag ["camlidl"; "compile"] (S[A"-header"]);
 
       (* camlidl rules starts here *)
       rule "camlidl"
@@ -134,7 +152,21 @@ let _ = dispatch begin function
         end;
 
       flag ["ocamlmklib"; "c"]
-        (S[A"-L."])
+        (S[A"-L."]);
+
+      (* compile dependencies *)
+      dep ["ocaml"; "compile"]
+        [
+          "src/libmagic.ml";
+          "src/libmagic_helper.o";
+          "src/libmagic_stubs.o";
+        ];
+
+      (* linking dependency *)
+      dep ["ocaml"; "link"]
+        [
+          "src/libmagic_helper.o";
+        ]
 
   | _ -> ()
 end

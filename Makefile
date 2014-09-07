@@ -17,7 +17,8 @@ OCAMLBUILD=ocamlbuild
 FILEDIR=file-5.19
 
 all: depcheck libmagic
-	$(OCAMLBUILD) -Is src -Xs buildtools,$(FILEDIR) libmagic.cmxa
+	$(OCAMLBUILD) -Is src -Xs buildtools,$(FILEDIR),file magic.cmxa \
+	file.native
 
 clean: depcheck
 	$(OCAMLBUILD) -clean
@@ -30,11 +31,14 @@ stamp:
 	mkdir $@
 
 stamp/magic-conf:
-	cd $(FILEDIR); ./configure && cd - && touch $@
+	cd $(FILEDIR); ./configure --enable-static && cd - && touch $@
 
 stamp/magic-make: $(FILEDIR)/src/file
 	cd $(FILEDIR); make && cd - && touch $@
 
-libmagic: stamp stamp/magic-conf stamp/magic-make
+file:
+	ln -sf $(FILEDIR) $@
+
+libmagic: stamp stamp/magic-conf stamp/magic-make file
 
 .PHONY: all clean depcheck libmagic
