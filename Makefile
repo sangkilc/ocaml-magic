@@ -33,8 +33,8 @@ stamp:
 stamp/magic-conf:
 	cd $(FILEDIR); ./configure --enable-static && cd - && touch $@
 
-stamp/magic-make: $(FILEDIR)/src/file
-	cd $(FILEDIR); make && cd - && touch $@
+stamp/magic-make:
+	make -C $(FILEDIR) && touch $@
 
 file:
 	ln -sf $(FILEDIR) $@
