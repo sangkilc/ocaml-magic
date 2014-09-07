@@ -15,7 +15,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 #include <stdio.h>
 #include <string.h>
-#include "libmagic.h"
+#include "magic_wrap.h"
 #include "magic.h"
 
 magic_ptr init_magic( int* r, const char* filename )

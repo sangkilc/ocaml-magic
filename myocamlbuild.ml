@@ -75,7 +75,7 @@ let _ = dispatch begin function
          "pkg_unix";
         ];
 
-      tag_file "src/libmagic_stubs.c" ["stubs"];
+      tag_file "src/magic_wrap_stubs.c" ["stubs"];
 
   | After_rules ->
 
@@ -123,8 +123,7 @@ let _ = dispatch begin function
         (S[A"-inline";A"10"]);
       flag ["ocaml"; "link"; "native"]
         (S[A"-inline";A"10";
-           A"../file/src/.libs/libmagic.a";
-           A"src/libmagic_stubs.o";
+           A"src/magic_wrap_stubs.o";
            A"-cclib"; A("-L"^ocamlpath^"/camlidl");
            A"-cclib"; A"-lcamlidl";
            A"-cclib"; A"-lz";
@@ -134,7 +133,7 @@ let _ = dispatch begin function
       flag ["c"; "compile"; "stubs"]
         (S[A"-ccopt";A("-I"^ocamlpath^"/camlidl");]);
 
-      flag ["c"; "compile"; "file:src/libmagic_helper.c"]
+      flag ["c"; "compile"; "file:src/magic_wrap_helper.c"]
         (S[A"-ccopt";A("-I../file/src");]);
 
       (* camlidl needs to consider bfdarch *)
@@ -151,21 +150,30 @@ let _ = dispatch begin function
           Seq [cmd]
         end;
 
+      rule "libmagic"
+        ~prods:["src/libmagic.a"]
+        ~deps:[]
+        begin fun _env _build ->
+          Cmd (S[A"cp"; A"../file/src/.libs/libmagic.a"; A"src/libmagic.a"])
+        end;
+
       flag ["ocamlmklib"; "c"]
         (S[A"-L."]);
 
       (* compile dependencies *)
       dep ["ocaml"; "compile"]
         [
-          "src/libmagic.ml";
-          "src/libmagic_helper.o";
-          "src/libmagic_stubs.o";
+          "src/magic_wrap.ml";
+          "src/magic_wrap_helper.o";
+          "src/magic_wrap_stubs.o";
+          "src/libmagic.a";
         ];
 
       (* linking dependency *)
       dep ["ocaml"; "link"]
         [
-          "src/libmagic_helper.o";
+          "src/magic_wrap_helper.o";
+          "src/libmagic.a";
         ]
 
   | _ -> ()

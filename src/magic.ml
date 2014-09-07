@@ -16,7 +16,7 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 *)
 
-open Libmagic
+open Magic_wrap
 
 let magic_file = "magic.mgc"
 let resolve_magic_path cwd =

@@ -16,6 +16,9 @@
 # check binaries
 bin,ocamlbuild
 bin,file
+bin,automake
 # check libraries
 lib,unix
 lib,str
+# check headers
+header,zlib.h
