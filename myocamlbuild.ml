@@ -123,11 +123,10 @@ let _ = dispatch begin function
         (S[A"-inline";A"10"]);
       flag ["ocaml"; "link"; "native"]
         (S[A"-inline";A"10";
-           A"src/magic_wrap_stubs.o";
            A"-cclib"; A("-L"^ocamlpath^"/camlidl");
+           A"-cclib"; A"-L.";
+           A"-cclib"; A"-lmagic_stubs";
            A"-cclib"; A"-lcamlidl";
-           A"-cclib"; Px"src/magic_wrap_helper.o";
-           A"-cclib"; Px"src/libmagic.a";
            A"-cclib"; A"-lz";
           ]);
 
@@ -153,14 +152,17 @@ let _ = dispatch begin function
         end;
 
       rule "libmagic"
-        ~prods:["src/libmagic.a"]
+        ~prods:["libmagic.a"]
         ~deps:[]
         begin fun _env _build ->
-          Cmd (S[A"cp"; A"../file/src/.libs/libmagic.a"; A"src/libmagic.a"])
+          Cmd (S[A"cp"; A"-R"; A"../file/src/.libs/"; A".libs"])
         end;
 
       flag ["ocamlmklib"; "c"]
-        (S[A"-L."]);
+        (S[
+            A"-L.";
+            A".libs/*.o";
+          ]);
 
       (* compile dependencies *)
       dep ["ocaml"; "compile"]
@@ -168,7 +170,8 @@ let _ = dispatch begin function
           "src/magic_wrap.ml";
           "src/magic_wrap_helper.o";
           "src/magic_wrap_stubs.o";
-          "src/libmagic.a";
+          "libmagic_stubs.a";
+          "libmagic.a";
         ];
 
   | _ -> ()

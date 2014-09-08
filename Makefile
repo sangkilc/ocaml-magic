@@ -41,4 +41,13 @@ file:
 
 libmagic: stamp stamp/magic-conf stamp/magic-make file
 
-.PHONY: all clean depcheck libmagic
+install: depcheck all
+	ocamlfind install ocaml-magic META \
+		_build/src/ocamlMagic.cmxa \
+		_build/src/ocamlMagic.a \
+		_build/src/magic.cmi \
+		_build/src/magic.mli \
+		_build/dllmagic_stubs.so \
+		_build/libmagic_stubs.a
+
+.PHONY: all clean depcheck libmagic install

@@ -1,0 +1,6 @@
+name = "ocaml-magic"
+version = "5.19"
+description = "an OCaml wrapper for libmagic"
+requires = "unix,str"
+archive(byte) = ""
+archive(native) = "ocamlMagic.cmxa"
