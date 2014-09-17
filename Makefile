@@ -31,7 +31,13 @@ stamp:
 	mkdir $@
 
 stamp/magic-conf:
-	cd $(FILEDIR); ./configure --enable-static && cd - && touch $@
+	cd $(FILEDIR); \
+		touch configure.ac \
+		      aclocal.m4 \
+		      configure \
+		      Makefile.am \
+		      Makefile.in && \
+		./configure --enable-static && cd - && touch $@
 
 stamp/magic-make:
 	make -C $(FILEDIR) && touch $@
