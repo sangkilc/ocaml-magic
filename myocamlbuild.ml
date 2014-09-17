@@ -151,8 +151,9 @@ let _ = dispatch begin function
           Seq [cmd]
         end;
 
-      rule "libmagic"
-        ~prods:["libmagic.a"]
+      (* dummy rule for copying .libs *)
+      rule "magic_copy"
+        ~prods:["magic_copy"]
         ~deps:[]
         begin fun _env _build ->
           Cmd (S[A"cp"; A"-R"; A"../file/src/.libs/"; A".libs"])
@@ -171,7 +172,11 @@ let _ = dispatch begin function
           "src/magic_wrap_helper.o";
           "src/magic_wrap_stubs.o";
           "libmagic_stubs.a";
-          "libmagic.a";
+        ];
+
+      dep ["c"; "compile"]
+        [
+          "magic_copy";
         ];
 
   | _ -> ()
