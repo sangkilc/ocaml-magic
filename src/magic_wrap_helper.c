@@ -18,9 +18,9 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include "magic_wrap.h"
 #include "magic.h"
 
-magic_ptr init_magic( int* r, const char* filename )
+magic_ptr init_magic( int* r, const char* filename, int flag )
 {
-    magic_t m = magic_open( MAGIC_NONE );
+    magic_t m = magic_open( flag );
     if ( strlen( filename ) == 0 )
         *r = magic_load( m, NULL );
     else

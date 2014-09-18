@@ -15,7 +15,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 typedef [abstract,ptr] void* magic_ptr;
 
-magic_ptr init_magic( [out] int* r, [in,string] const char* filename );
+magic_ptr init_magic( [out] int* r, [in,string] const char* filename, int flag );
 void destroy_magic( magic_ptr p );
 
 [string] char* from_file( magic_ptr p, [string] const char* filename );

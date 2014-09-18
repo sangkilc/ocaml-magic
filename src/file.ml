@@ -24,7 +24,7 @@ let filecheck m file =
 
 let _ =
   let file = try Sys.argv.(1) with _ -> failwith "provide a filename" in
-  let m = init_magic () in
+  let m = init_magic MAGIC_MIME_TYPE in
   filecheck m file;
   destroy_magic m
 

@@ -18,7 +18,12 @@
 
 type magic
 
-val init_magic : unit -> magic
+type magic_flag =
+  | MAGIC_NONE
+  | MAGIC_MIME_TYPE
+  | MAGIC_MIME
+
+val init_magic : magic_flag -> magic
 
 val destroy_magic : magic -> unit
 

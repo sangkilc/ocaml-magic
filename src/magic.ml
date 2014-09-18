@@ -20,6 +20,16 @@ open Magic_wrap
 
 type magic = magic_ptr
 
+type magic_flag =
+  | MAGIC_NONE
+  | MAGIC_MIME_TYPE
+  | MAGIC_MIME
+
+let flag_to_int = function (* these are from file/src/magic.h *)
+  | MAGIC_NONE      -> 0x0
+  | MAGIC_MIME_TYPE -> 0x10
+  | MAGIC_MIME      -> 0x410
+
 let magic_file = "magic.mgc"
 let resolve_magic_path cwd =
   let path1 = Filename.concat cwd magic_file in
@@ -28,9 +38,10 @@ let resolve_magic_path cwd =
   else if Sys.file_exists path2 then path2
   else ""
 
-let init_magic () =
+let init_magic flag =
   let path = resolve_magic_path (Unix.getcwd ()) in
-  match init_magic path with
+  let flag = flag_to_int flag in
+  match init_magic path flag with
     | m, 0 -> m
     | _, _ -> failwith "failed to initialize libmagic"
 
