@@ -47,7 +47,7 @@ file:
 
 libmagic: stamp stamp/magic-conf stamp/magic-make file
 
-install: depcheck all
+libinstall:
 	ocamlfind install ocaml-magic META \
 		_build/src/ocamlMagic.cmxa \
 		_build/src/ocamlMagic.a \
@@ -56,4 +56,9 @@ install: depcheck all
 		_build/dllmagic_stubs.so \
 		_build/libmagic_stubs.a
 
-.PHONY: all clean depcheck libmagic install
+mgcinstall:
+	mkdir ~/.magic 2> /dev/null ; cp file/magic/magic.mgc ~/.magic
+
+install: depcheck all libinstall mgcinstall
+
+.PHONY: all clean depcheck libmagic install libinstall mgcinstall
