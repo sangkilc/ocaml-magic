@@ -16,11 +16,11 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 *)
 
-open Magic_wrap
+type magic
 
-val init_magic : unit -> magic_ptr
+val init_magic : unit -> magic
 
-val destroy_magic : magic_ptr -> unit
+val destroy_magic : magic -> unit
 
-val from_file : magic_ptr -> string -> string
+val from_file : magic -> string -> string
 

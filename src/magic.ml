@@ -18,6 +18,8 @@
 
 open Magic_wrap
 
+type magic = magic_ptr
+
 let magic_file = "magic.mgc"
 let resolve_magic_path cwd =
   let path1 = Filename.concat cwd magic_file in
