@@ -119,6 +119,15 @@ let _ = dispatch begin function
         (S[A"-g"]);
       flag ["ocaml"; "link"]
         (S[A"-g"]);
+      flag ["ocaml"; "link"; "mktop"]
+        (S[A"-custom";
+           A"-cclib"; A("-L"^ocamlpath^"/camlidl");
+           A"-cclib"; A"-L.";
+           A"-cclib"; A"-lmagic_stubs";
+           A"-cclib"; A"-lcamlidl";
+           A"-cclib"; A"-lz";
+           A"-linkpkg";
+          ]);
       flag ["ocaml"; "compile"; "native"]
         (S[A"-inline";A"10"]);
       flag ["ocaml"; "link"; "native"]
@@ -156,7 +165,10 @@ let _ = dispatch begin function
         ~prods:["magic_copy"]
         ~deps:[]
         begin fun _env _build ->
-          Cmd (S[A"cp"; A"-R"; A"../file/src/.libs/"; A".libs"])
+          Seq [
+            Cmd (S[A"rm"; A"-rf"; A".libs"]);
+            Cmd (S[A"cp"; A"-R"; A"../file/src/.libs/"; A".libs"]);
+          ]
         end;
 
       flag ["ocamlmklib"; "c"]

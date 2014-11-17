@@ -18,10 +18,11 @@ FILEDIR=file-5.19
 
 all: depcheck libmagic
 	$(OCAMLBUILD) -Is src -Xs buildtools,$(FILEDIR),file ocamlMagic.cmxa \
-	file.native
+	magic.top file.native
 
 clean: depcheck
 	$(OCAMLBUILD) -clean
+	make -C $(FILEDIR) clean
 	rm -rf stamp
 
 depcheck: Makefile.dep

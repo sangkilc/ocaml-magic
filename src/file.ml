@@ -18,13 +18,30 @@
 
 open Magic
 
-let filecheck m file =
-  let s = from_file m file in
-  Printf.printf "%s: %s\n" file s
+let filelist = ref []
+
+let filecheck m =
+  if List.length !filelist = 0 then raise (Arg.Bad "file name not given")
+  else
+    List.iter (fun file ->
+      let s = from_file m file in
+      Printf.printf "%s: %s\n" file s
+    ) (List.rev !filelist)
+
+let use_mime = ref false
+
+let spec =
+  [
+    ("-mime", Arg.Set use_mime, " use MIME");
+  ]
+
+let anon file = filelist := file::!filelist
+let usage = "Usage: ./file [options] <file(s)>\n"
 
 let _ =
-  let file = try Sys.argv.(1) with _ -> failwith "provide a filename" in
-  let m = init_magic MAGIC_MIME_TYPE in
-  filecheck m file;
+  Arg.parse (Arg.align spec) anon usage;
+  let opt = if !use_mime then MAGIC_MIME_TYPE else MAGIC_NONE in
+  let m = init_magic opt in
+  filecheck m;
   destroy_magic m
 
